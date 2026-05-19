@@ -27,6 +27,7 @@ const copy = {
     groundNote: "GOFO Ground is focused on large parcel delivery.",
     submit: "Submit application",
     success: "Application received. Thank you.",
+    submitError: "Unable to submit right now. Please try again.",
   },
   zh: {
     documentTitle: "DSP 合作伙伴申请",
@@ -56,6 +57,7 @@ const copy = {
     groundNote: "GOFO Ground 主要面向大件包裹配送。",
     submit: "提交申请",
     success: "申请已收到，谢谢。",
+    submitError: "当前无法提交，请稍后再试。",
   },
   es: {
     documentTitle: "Solicitud de Socio DSP",
@@ -85,6 +87,7 @@ const copy = {
     groundNote: "GOFO Ground se enfoca principalmente en la entrega de paquetes grandes.",
     submit: "Enviar solicitud",
     success: "Solicitud recibida. Gracias.",
+    submitError: "No se puede enviar en este momento. Inténtalo de nuevo.",
   },
 };
 
@@ -151,6 +154,12 @@ const mapContainer = document.querySelector("#usMap");
 const mapTooltip = document.querySelector("#mapTooltip");
 const mapFrame = document.querySelector(".map-frame");
 let currentLanguage = "en";
+let messageKey = "success";
+
+function setStatusMessage(key) {
+  messageKey = key;
+  successMessage.textContent = copy[currentLanguage][key] || copy.en[key];
+}
 
 function setLanguage(language) {
   const dictionary = copy[language] || copy.en;
@@ -173,6 +182,8 @@ function setLanguage(language) {
     button.classList.toggle("active", isActive);
     button.setAttribute("aria-pressed", String(isActive));
   });
+
+  setStatusMessage(messageKey);
 }
 
 function tooltipMarkup(state, stations) {
@@ -267,6 +278,7 @@ form.addEventListener("submit", (event) => {
 
   submitButton.disabled = true;
   successMessage.hidden = true;
+  setStatusMessage("success");
 
   fetch("/api/applications", {
     method: "POST",
@@ -283,12 +295,13 @@ form.addEventListener("submit", (event) => {
       return response.json();
     })
     .then(() => {
+      setStatusMessage("success");
       successMessage.hidden = false;
       form.reset();
     })
     .catch(() => {
+      setStatusMessage("submitError");
       successMessage.hidden = false;
-      successMessage.textContent = "Unable to submit right now. Please try again.";
     })
     .finally(() => {
       submitButton.disabled = false;

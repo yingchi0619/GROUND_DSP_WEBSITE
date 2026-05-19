@@ -512,8 +512,9 @@ h1 {
 
 .van-body span:not(.van-windshield):not(.van-side-window):not(.van-door-line) {
   color: var(--brand);
-  font-size: 0.52rem;
+  font-size: 0.42rem;
   font-weight: 850;
+  line-height: 1;
 }
 
 .van-windshield,
