@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DSP CRM</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="crm-shell">
+      <section class="crm-card" aria-labelledby="crmTitle">
+        <header class="crm-header">
+          <div>
+            <p class="eyebrow">DSP CRM</p>
+            <h1 id="crmTitle">Registered DSP Applications</h1>
+            <p>Applications submitted from the partner form are stored in the local database and appear here.</p>
+          </div>
+          <a class="crm-link" href="/">Application form</a>
+        </header>
+
+        <div class="crm-metrics" aria-label="CRM summary">
+          <article>
+            <span>Total DSPs</span>
+            <strong id="crmTotal">0</strong>
+          </article>
+          <article>
+            <span>Regions</span>
+            <strong id="crmRegions">0</strong>
+          </article>
+          <article>
+            <span>Latest</span>
+            <strong id="crmLatest">-</strong>
+          </article>
+        </div>
+
+        <div class="crm-toolbar">
+          <label class="crm-search">
+            <span>Search</span>
+            <input id="crmSearch" type="search" placeholder="Company, contact, email, region" />
+          </label>
+          <button class="crm-refresh" id="refreshCrm" type="button">Refresh</button>
+        </div>
+
+        <div class="crm-table-wrap">
+          <table class="crm-table">
+            <thead>
+              <tr>
+                <th>Company</th>
+                <th>Contact</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Region</th>
+                <th>Notes</th>
+                <th>Submitted</th>
+              </tr>
+            </thead>
+            <tbody id="crmRows"></tbody>
+          </table>
+          <p class="crm-empty" id="crmEmpty" hidden>No DSP applications yet.</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="crm.js"></script>
+  </body>
+</html>
