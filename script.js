@@ -100,6 +100,7 @@ const stationData = [
   { station: "CH600/ORD.G", city: "Franklin Park", state: "IL" },
   { station: "CL432", city: "Columbus", state: "OH" },
   { station: "CV441", city: "Cleveland", state: "OH" },
+  { station: "DAL", city: "Dallas", state: "TX" },
   { station: "FR937", city: "Fresno", state: "CA" },
   { station: "IN462", city: "Indianapolis", state: "IN" },
   { station: "LA900", city: "Santa Fe Springs", state: "CA" },
@@ -133,6 +134,7 @@ const stateNames = {
   OH: "Ohio",
   OR: "Oregon",
   PA: "Pennsylvania",
+  TX: "Texas",
   WA: "Washington",
 };
 
