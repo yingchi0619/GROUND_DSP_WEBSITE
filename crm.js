@@ -5,6 +5,7 @@ const totalEl = document.querySelector("#crmTotal");
 const regionsEl = document.querySelector("#crmRegions");
 const latestEl = document.querySelector("#crmLatest");
 const refreshButton = document.querySelector("#refreshCrm");
+const logoutButton = document.querySelector("#logoutCrm");
 
 let applications = [];
 
@@ -67,6 +68,11 @@ async function loadApplications() {
   refreshButton.disabled = true;
   try {
     const response = await fetch("/api/applications");
+    if (response.status === 401) {
+      window.location.href = "/login.html";
+      return;
+    }
+
     if (!response.ok) {
       throw new Error("Unable to load applications");
     }
@@ -81,6 +87,13 @@ async function loadApplications() {
   }
 }
 
+async function logout() {
+  logoutButton.disabled = true;
+  await fetch("/api/logout", { method: "POST" });
+  window.location.href = "/login.html";
+}
+
 searchEl.addEventListener("input", renderRows);
 refreshButton.addEventListener("click", loadApplications);
+logoutButton.addEventListener("click", logout);
 loadApplications();

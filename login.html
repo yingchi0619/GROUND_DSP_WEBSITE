@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DSP CRM Login</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="login-shell">
+      <section class="login-card" aria-labelledby="loginTitle">
+        <p class="eyebrow">DSP CRM</p>
+        <h1 id="loginTitle">Admin login</h1>
+        <form class="login-form" id="loginForm">
+          <label class="field">
+            <span>Username</span>
+            <input name="username" required autocomplete="username" />
+          </label>
+          <label class="field">
+            <span>Password</span>
+            <input name="password" required type="password" autocomplete="current-password" />
+          </label>
+          <button class="submit-button" id="loginButton" type="submit">Log in</button>
+          <p class="success-message" id="loginMessage" role="status" aria-live="polite" hidden></p>
+        </form>
+        <a class="crm-link login-back-link" href="/">Application form</a>
+      </section>
+    </main>
+
+    <script src="login.js"></script>
+  </body>
+</html>
