@@ -9,6 +9,7 @@ import sqlite3
 import time
 from pathlib import Path
 from urllib.parse import urlparse
+from urllib.request import Request, urlopen
 
 
 ROOT = Path(__file__).resolve().parent
@@ -16,6 +17,52 @@ DB_PATH = Path(os.environ.get("DB_PATH", ROOT / "data" / "dsp_applications.db"))
 SESSION_COOKIE = "dsp_admin_session"
 SESSION_TTL_SECONDS = 60 * 60 * 12
 PBKDF2_ROUNDS = 260_000
+RESEND_API_URL = "https://api.resend.com/emails"
+
+
+def send_application_notification(application):
+    api_key = os.environ.get("RESEND_API_KEY", "").strip()
+    notify_email = os.environ.get("NOTIFY_EMAIL", "").strip()
+    from_email = os.environ.get("FROM_EMAIL", "onboarding@resend.dev").strip()
+
+    if not api_key or not notify_email:
+        return
+
+    text_body = "\n".join(
+        [
+            "New DSP application received.",
+            "",
+            f"Company: {application['company']}",
+            f"Contact: {application['contact']}",
+            f"Phone: {application['phone']}",
+            f"Email: {application['email']}",
+            f"Region: {application['region']}",
+            f"Language: {application['language']}",
+            f"Notes: {application['notes'] or '-'}",
+            f"Submitted: {application['created_at']}",
+        ]
+    )
+    payload = {
+        "from": from_email,
+        "to": [notify_email],
+        "subject": f"New DSP application: {application['company']}",
+        "text": text_body,
+    }
+    request = Request(
+        RESEND_API_URL,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+        },
+        method="POST",
+    )
+
+    try:
+        with urlopen(request, timeout=8) as response:
+            response.read()
+    except Exception as error:
+        print(f"Notification email failed: {error}")
 
 
 def hash_password(password, salt=None):
@@ -319,7 +366,9 @@ class DSPHandler(SimpleHTTPRequestHandler):
                 (cursor.lastrowid,),
             ).fetchone()
 
-        self.send_json(201, dict(row))
+        application = dict(row)
+        send_application_notification(application)
+        self.send_json(201, application)
 
 
 if __name__ == "__main__":
