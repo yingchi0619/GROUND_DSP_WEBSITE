@@ -6,6 +6,7 @@ const regionsEl = document.querySelector("#crmRegions");
 const latestEl = document.querySelector("#crmLatest");
 const refreshButton = document.querySelector("#refreshCrm");
 const logoutButton = document.querySelector("#logoutCrm");
+const exportButton = document.querySelector("#exportCrm");
 
 let applications = [];
 
@@ -39,6 +40,26 @@ function languageLabel(value) {
     es: "Español",
   };
   return labels[value] || value || "-";
+}
+
+function csvCell(value) {
+  return `"${String(value ?? "").replaceAll('"', '""')}"`;
+}
+
+function exportApplications() {
+  const headers = ["id", "company", "contact", "phone", "email", "region", "language", "notes", "created_at"];
+  const rows = applications.map((item) => headers.map((key) => csvCell(item[key])).join(","));
+  const csv = [headers.join(","), ...rows].join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  const date = new Date().toISOString().slice(0, 10);
+  link.href = url;
+  link.download = `dsp-applications-${date}.csv`;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
 }
 
 function renderMetrics(items) {
@@ -88,6 +109,7 @@ async function loadApplications() {
     }
 
     applications = await response.json();
+    exportButton.disabled = applications.length === 0;
     renderRows();
   } catch (error) {
     emptyEl.hidden = false;
@@ -106,4 +128,6 @@ async function logout() {
 searchEl.addEventListener("input", renderRows);
 refreshButton.addEventListener("click", loadApplications);
 logoutButton.addEventListener("click", logout);
+exportButton.addEventListener("click", exportApplications);
+exportButton.disabled = true;
 loadApplications();
