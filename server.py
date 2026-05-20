@@ -26,7 +26,7 @@ def send_application_notification(application):
     from_email = os.environ.get("FROM_EMAIL", "onboarding@resend.dev").strip()
 
     if not api_key or not notify_email:
-        print("Email notifications disabled: missing RESEND_API_KEY or NOTIFY_EMAIL")
+        print("Email notifications disabled: missing RESEND_API_KEY or NOTIFY_EMAIL", flush=True)
         return
 
     text_body = "\n".join(
@@ -62,9 +62,23 @@ def send_application_notification(application):
     try:
         with urlopen(request, timeout=8) as response:
             response.read()
-        print(f"Email notification sent for application {application['id']}")
+        print(f"Email notification sent for application {application['id']}", flush=True)
     except Exception as error:
-        print(f"Notification email failed: {error}")
+        print(f"Notification email failed: {error}", flush=True)
+
+
+def log_notification_config():
+    has_api_key = bool(os.environ.get("RESEND_API_KEY", "").strip())
+    notify_email = os.environ.get("NOTIFY_EMAIL", "").strip()
+    from_email = os.environ.get("FROM_EMAIL", "onboarding@resend.dev").strip()
+    status = "enabled" if has_api_key and notify_email else "disabled"
+    print(
+        f"Email notifications {status}. "
+        f"RESEND_API_KEY={'set' if has_api_key else 'missing'}, "
+        f"NOTIFY_EMAIL={notify_email or 'missing'}, "
+        f"FROM_EMAIL={from_email or 'missing'}",
+        flush=True,
+    )
 
 
 def hash_password(password, salt=None):
@@ -375,6 +389,7 @@ class DSPHandler(SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     configure_admin_account()
+    log_notification_config()
     get_connection().close()
     host = os.environ.get("HOST", "0.0.0.0")
     port = int(os.environ.get("PORT", "4173"))
