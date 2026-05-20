@@ -26,6 +26,7 @@ def send_application_notification(application):
     from_email = os.environ.get("FROM_EMAIL", "onboarding@resend.dev").strip()
 
     if not api_key or not notify_email:
+        print("Email notifications disabled: missing RESEND_API_KEY or NOTIFY_EMAIL")
         return
 
     text_body = "\n".join(
@@ -61,6 +62,7 @@ def send_application_notification(application):
     try:
         with urlopen(request, timeout=8) as response:
             response.read()
+        print(f"Email notification sent for application {application['id']}")
     except Exception as error:
         print(f"Notification email failed: {error}")
 
