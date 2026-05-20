@@ -64,12 +64,21 @@ body::after {
 
 button,
 input,
+select,
 textarea {
   font: inherit;
 }
 
 button {
   cursor: pointer;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.is-hidden {
+  display: none !important;
 }
 
 .page-shell {
@@ -350,11 +359,26 @@ h1 {
   box-shadow: 0 0 0 5px rgba(252, 76, 2, 0.18), 0 0 20px rgba(252, 76, 2, 0.72);
 }
 
+.legend-dot-planned {
+  background: #747986;
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.08), 0 0 16px rgba(255, 255, 255, 0.18);
+}
+
 .us-map {
   display: grid;
   min-height: 318px;
   place-items: center;
   padding: 30px;
+  touch-action: none;
+  user-select: none;
+}
+
+.us-map.is-zoomed {
+  cursor: grab;
+}
+
+.us-map.is-dragging {
+  cursor: grabbing;
 }
 
 .us-map svg {
@@ -362,6 +386,49 @@ h1 {
   width: min(100%, 610px);
   height: auto;
   overflow: visible;
+  transform-origin: center center;
+  transition: transform 180ms ease;
+}
+
+.map-controls {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 3;
+  display: inline-flex;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(18, 20, 26, 0.64);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(16px);
+}
+
+.map-control {
+  display: inline-grid;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 0.86rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.map-control:hover,
+.map-control:focus {
+  background: rgba(252, 76, 2, 0.88);
+  outline: none;
+}
+
+.map-control:disabled {
+  cursor: default;
+  opacity: 0.45;
 }
 
 .us-map svg .state path,
@@ -379,8 +446,16 @@ h1 {
   cursor: pointer;
 }
 
+.us-map svg path.is-planned:not(.is-open) {
+  fill: #747986;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.12));
+  cursor: pointer;
+}
+
 .us-map svg path.is-open:hover,
-.us-map svg path.is-open:focus {
+.us-map svg path.is-open:focus,
+.us-map svg path.is-planned:hover,
+.us-map svg path.is-planned:focus {
   fill: var(--brand-2);
   outline: none;
 }
@@ -587,6 +662,7 @@ h1 {
 }
 
 input,
+select,
 textarea {
   width: 100%;
   min-height: 52px;
@@ -607,6 +683,20 @@ input {
   padding: 0 16px;
 }
 
+select {
+  padding: 0 44px 0 16px;
+  appearance: none;
+  background-color: rgba(255, 255, 255, 0.82);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 21px) 22px,
+    calc(100% - 15px) 22px;
+  background-repeat: no-repeat;
+  background-size: 6px 6px;
+}
+
 textarea {
   min-height: 118px;
   padding: 15px 16px;
@@ -619,12 +709,14 @@ textarea::placeholder {
 }
 
 input:hover,
+select:hover,
 textarea:hover {
   border-color: var(--line-strong);
   background: rgba(255, 255, 255, 0.92);
 }
 
 input:focus,
+select:focus,
 textarea:focus {
   border-color: var(--focus);
   background: var(--surface-strong);
@@ -953,7 +1045,7 @@ textarea:focus {
 
 .crm-table {
   width: 100%;
-  min-width: 980px;
+  min-width: 1080px;
   border-collapse: collapse;
 }
 

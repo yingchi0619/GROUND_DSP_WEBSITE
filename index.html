@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DSP Partner Application</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=20260520" />
   </head>
   <body>
     <main class="page-shell">
@@ -32,8 +32,8 @@
             Share your company contact details and operating region. Our team will review your information and follow up.
           </p>
           <div class="hero-pills" aria-label="Network highlights">
-            <span>25 stations</span>
-            <span>16 active states</span>
+            <span>24 stations</span>
+            <span>17 active states</span>
             <span>US ground network</span>
           </div>
           <p class="ground-note" data-i18n="groundNote">GOFO Ground is focused on large parcel delivery.</p>
@@ -50,8 +50,15 @@
             <div class="map-legend">
               <span class="legend-dot" aria-hidden="true"></span>
               <span data-i18n="legend">Open station state</span>
+              <span class="legend-dot legend-dot-planned" aria-hidden="true"></span>
+              <span data-i18n="plannedLabel">Coming soon</span>
             </div>
             <div class="us-map" id="usMap" aria-label="United States station map"></div>
+            <div class="map-controls" aria-label="Map zoom controls">
+              <button class="map-control" id="mapZoomOut" type="button" aria-label="Zoom out">−</button>
+              <button class="map-control" id="mapZoomReset" type="button" aria-label="Reset zoom">1×</button>
+              <button class="map-control" id="mapZoomIn" type="button" aria-label="Zoom in">+</button>
+            </div>
             <div class="map-tooltip" id="mapTooltip" role="status" aria-live="polite"></div>
           </div>
         </section>
@@ -94,7 +101,14 @@
 
             <label class="field field-wide">
               <span data-i18n="regionLabel">Responsible region</span>
-              <input name="region" required data-i18n-placeholder="regionPlaceholder" placeholder="Bay Area, California" />
+              <select name="regionChoice" id="regionSelect" required>
+                <option value="" data-i18n="regionSelectPlaceholder">Select an active city</option>
+              </select>
+            </label>
+
+            <label class="field field-wide region-other-field is-hidden" id="regionOtherField" hidden>
+              <span data-i18n="regionOtherLabel">Interested city</span>
+              <input name="regionOther" id="regionOtherInput" data-i18n-placeholder="regionOtherPlaceholder" placeholder="Tell us the city you are interested in" />
             </label>
 
             <label class="field field-wide">
@@ -124,6 +138,6 @@
     </a>
 
     <script src="us-map-data.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js?v=20260520"></script>
   </body>
 </html>

@@ -52,6 +52,13 @@ def get_connection():
         )
         """
     )
+    application_columns = {
+        row["name"]
+        for row in connection.execute("PRAGMA table_info(applications)").fetchall()
+    }
+    if "language" not in application_columns:
+        connection.execute("ALTER TABLE applications ADD COLUMN language TEXT NOT NULL DEFAULT 'en'")
+
     connection.execute(
         """
         CREATE TABLE IF NOT EXISTS admin_users (
@@ -193,7 +200,7 @@ class DSPHandler(SimpleHTTPRequestHandler):
             with get_connection() as connection:
                 rows = connection.execute(
                     """
-                    SELECT id, company, contact, phone, email, region, notes, created_at
+                    SELECT id, company, contact, phone, email, region, language, notes, created_at
                     FROM applications
                     ORDER BY datetime(created_at) DESC, id DESC
                     """
@@ -291,20 +298,21 @@ class DSPHandler(SimpleHTTPRequestHandler):
             "phone": data["phone"].strip(),
             "email": data["email"].strip(),
             "region": data["region"].strip(),
+            "language": str(data.get("language", "en")).strip() or "en",
             "notes": str(data.get("notes", "")).strip(),
         }
 
         with get_connection() as connection:
             cursor = connection.execute(
                 """
-                INSERT INTO applications (company, contact, phone, email, region, notes)
-                VALUES (:company, :contact, :phone, :email, :region, :notes)
+                INSERT INTO applications (company, contact, phone, email, region, language, notes)
+                VALUES (:company, :contact, :phone, :email, :region, :language, :notes)
                 """,
                 values,
             )
             row = connection.execute(
                 """
-                SELECT id, company, contact, phone, email, region, notes, created_at
+                SELECT id, company, contact, phone, email, region, language, notes, created_at
                 FROM applications
                 WHERE id = ?
                 """,

@@ -32,6 +32,15 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function languageLabel(value) {
+  const labels = {
+    en: "English",
+    zh: "中文",
+    es: "Español",
+  };
+  return labels[value] || value || "-";
+}
+
 function renderMetrics(items) {
   totalEl.textContent = applications.length;
   regionsEl.textContent = new Set(applications.map((item) => item.region).filter(Boolean)).size;
@@ -42,7 +51,7 @@ function renderMetrics(items) {
 function renderRows() {
   const query = searchEl.value.trim().toLowerCase();
   const filtered = applications.filter((item) => {
-    const text = `${item.company} ${item.contact} ${item.phone} ${item.email} ${item.region} ${item.notes}`.toLowerCase();
+    const text = `${item.company} ${item.contact} ${item.phone} ${item.email} ${item.region} ${item.language} ${item.notes}`.toLowerCase();
     return !query || text.includes(query);
   });
 
@@ -55,6 +64,7 @@ function renderRows() {
       <td>${escapeHtml(item.phone)}</td>
       <td><a href="mailto:${escapeHtml(item.email)}">${escapeHtml(item.email)}</a></td>
       <td>${escapeHtml(item.region)}</td>
+      <td>${escapeHtml(languageLabel(item.language))}</td>
       <td>${escapeHtml(item.notes || "-")}</td>
       <td>${formatDate(item.created_at)}</td>
     `;
