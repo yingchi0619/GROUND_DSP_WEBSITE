@@ -13,10 +13,11 @@
           <div>
             <p class="eyebrow">DSP CRM</p>
             <h1 id="crmTitle">Registered DSP Applications</h1>
-            <p>Applications submitted from the partner form are stored in the local database and appear here.</p>
+            <p>New applications are stored in Cloudflare D1 with private R2 backups. Historical Render records also appear here.</p>
           </div>
           <div class="crm-actions">
             <a class="crm-link" href="/">Application form</a>
+            <button class="crm-refresh" id="retryNotifications" type="button">Retry pending emails</button>
             <button class="crm-refresh" id="exportCrm" type="button">Export CSV</button>
             <button class="crm-refresh" id="logoutCrm" type="button">Log out</button>
           </div>
@@ -55,6 +56,10 @@
                 <th>Email</th>
                 <th>Region</th>
                 <th>Language</th>
+                <th>Earliest start</th>
+                <th>Cargo vans</th>
+                <th>Van count</th>
+                <th>Email notification</th>
                 <th>Notes</th>
                 <th>Submitted</th>
               </tr>

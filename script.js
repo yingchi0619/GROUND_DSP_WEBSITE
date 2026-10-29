@@ -30,6 +30,12 @@ const copy = {
     regionOther: "Other",
     regionOtherLabel: "Interested city",
     regionOtherPlaceholder: "Tell us the city you are interested in",
+    earliestStartDateLabel: "Earliest start date",
+    hasCargoVanLabel: "Do you have cargo vans?",
+    chooseOption: "Please select",
+    yesLabel: "Yes",
+    noLabel: "No",
+    cargoVanCountLabel: "Number of cargo vans",
     notesLabel: "Additional notes",
     notesPlaceholder: "Fleet size, service coverage, available start date",
     privacy: "Your information is used only for DSP partner recruitment.",
@@ -69,6 +75,12 @@ const copy = {
     regionOther: "其他",
     regionOtherLabel: "感兴趣的城市",
     regionOtherPlaceholder: "请填写你感兴趣的城市",
+    earliestStartDateLabel: "最早可开始日期",
+    hasCargoVanLabel: "是否拥有 Cargo Van（货运厢式车）？",
+    chooseOption: "请选择",
+    yesLabel: "有",
+    noLabel: "没有",
+    cargoVanCountLabel: "Cargo Van 数量（辆）",
     notesLabel: "补充说明",
     notesPlaceholder: "车辆规模、服务范围、可开始合作时间",
     privacy: "你的信息仅用于 DSP 合作伙伴招募。",
@@ -108,6 +120,12 @@ const copy = {
     regionOther: "Otra",
     regionOtherLabel: "Ciudad de interés",
     regionOtherPlaceholder: "Cuéntanos la ciudad que te interesa",
+    earliestStartDateLabel: "Fecha más temprana de inicio",
+    hasCargoVanLabel: "¿Tiene furgonetas de carga?",
+    chooseOption: "Seleccione una opción",
+    yesLabel: "Sí",
+    noLabel: "No",
+    cargoVanCountLabel: "Número de furgonetas de carga",
     notesLabel: "Notas adicionales",
     notesPlaceholder: "Tamaño de flota, cobertura, fecha disponible de inicio",
     privacy: "Tu información se usa solo para reclutamiento de socios DSP.",
@@ -168,6 +186,21 @@ const mapFrame = document.querySelector(".map-frame");
 const mapZoomIn = document.querySelector("#mapZoomIn");
 const mapZoomOut = document.querySelector("#mapZoomOut");
 const mapZoomReset = document.querySelector("#mapZoomReset");
+const earliestStartDate = document.querySelector("#earliestStartDate");
+const hasCargoVan = document.querySelector("#hasCargoVan");
+const cargoVanCount = document.querySelector("#cargoVanCount");
+const cargoVanCountField = document.querySelector("#cargoVanCountField");
+function updateCargoVanField() {
+  const hasVans = hasCargoVan.value === "yes";
+  cargoVanCountField.hidden = !hasVans;
+  cargoVanCountField.classList.toggle("is-hidden", !hasVans);
+  cargoVanCount.disabled = !hasVans;
+  cargoVanCount.required = hasVans;
+  if (!hasVans) cargoVanCount.value = "";
+}
+hasCargoVan.addEventListener("change", updateCargoVanField);
+const today = new Date();
+earliestStartDate.min = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
 let currentLanguage = "en";
 let messageKey = "success";
 let mapScale = 1;
@@ -358,7 +391,7 @@ async function loadStationMap() {
     const svg = mapContainer.querySelector("svg");
     svg.removeAttribute("width");
     svg.removeAttribute("height");
-    svg.setAttribute("viewBox", "0 0 959 593");
+    svg.setAttribute("viewBox", "530 35 410 290");
     svg.setAttribute("role", "img");
     svg.setAttribute("aria-label", "Eastern United States coverage reference map");
     applyMapZoom();
@@ -454,6 +487,7 @@ form.addEventListener("submit", (event) => {
   const payload = Object.fromEntries(formData.entries());
   payload.region = payload.regionChoice === "Other" ? payload.regionOther.trim() : payload.regionChoice;
   payload.language = currentLanguage;
+  payload.cargoVanCount = payload.hasCargoVan === "yes" ? Number(payload.cargoVanCount) : 0;
   delete payload.regionChoice;
   delete payload.regionOther;
 
@@ -480,6 +514,7 @@ form.addEventListener("submit", (event) => {
       successMessage.hidden = false;
       form.reset();
       updateOtherRegionField();
+      updateCargoVanField();
     })
     .catch(() => {
       setStatusMessage("submitError");

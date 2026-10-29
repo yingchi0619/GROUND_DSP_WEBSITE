@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DSP Partner Application</title>
-    <link rel="stylesheet" href="styles.css?v=20261029" />
+    <link rel="stylesheet" href="styles.css?v=20261029b" />
   </head>
   <body>
     <main class="page-shell">
@@ -109,6 +109,25 @@
               <input name="regionOther" id="regionOtherInput" data-i18n-placeholder="regionOtherPlaceholder" placeholder="Tell us the city you are interested in" />
             </label>
 
+            <label class="field">
+              <span data-i18n="earliestStartDateLabel">Earliest start date</span>
+              <input name="earliestStartDate" id="earliestStartDate" type="date" required />
+            </label>
+
+            <label class="field">
+              <span data-i18n="hasCargoVanLabel">Do you have cargo vans?</span>
+              <select name="hasCargoVan" id="hasCargoVan" required>
+                <option value="" data-i18n="chooseOption">Please select</option>
+                <option value="yes" data-i18n="yesLabel">Yes</option>
+                <option value="no" data-i18n="noLabel">No</option>
+              </select>
+            </label>
+
+            <label class="field field-wide is-hidden" id="cargoVanCountField" hidden>
+              <span data-i18n="cargoVanCountLabel">Number of cargo vans</span>
+              <input name="cargoVanCount" id="cargoVanCount" type="number" min="1" max="10000" step="1" inputmode="numeric" disabled />
+            </label>
+
             <label class="field field-wide">
               <span data-i18n="notesLabel">Additional notes</span>
               <textarea name="notes" rows="4" data-i18n-placeholder="notesPlaceholder" placeholder="Fleet size, service coverage, available start date"></textarea>
@@ -136,6 +155,6 @@
     </a>
 
     <script src="us-map-data.js"></script>
-    <script src="script.js?v=20261029"></script>
+    <script src="script.js?v=20261029b"></script>
   </body>
 </html>

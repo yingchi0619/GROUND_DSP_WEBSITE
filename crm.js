@@ -47,7 +47,7 @@ function csvCell(value) {
 }
 
 function exportApplications() {
-  const headers = ["id", "company", "contact", "phone", "email", "region", "language", "notes", "created_at"];
+  const headers = ["id", "company", "contact", "phone", "email", "region", "language", "earliestStartDate", "hasCargoVan", "cargoVanCount", "email_status", "notes", "created_at"];
   const rows = applications.map((item) => headers.map((key) => csvCell(item[key])).join(","));
   const csv = [headers.join(","), ...rows].join("\n");
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
@@ -86,6 +86,10 @@ function renderRows() {
       <td><a href="mailto:${escapeHtml(item.email)}">${escapeHtml(item.email)}</a></td>
       <td>${escapeHtml(item.region)}</td>
       <td>${escapeHtml(languageLabel(item.language))}</td>
+      <td>${escapeHtml(item.earliestStartDate || "-")}</td>
+      <td>${escapeHtml(item.hasCargoVan === "yes" ? "Yes" : item.hasCargoVan === "no" ? "No" : "-")}</td>
+      <td>${escapeHtml(item.cargoVanCount ?? "-")}</td>
+      <td>${escapeHtml(item.email_status || "legacy")}</td>
       <td>${escapeHtml(item.notes || "-")}</td>
       <td>${formatDate(item.created_at)}</td>
     `;
@@ -131,3 +135,17 @@ logoutButton.addEventListener("click", logout);
 exportButton.addEventListener("click", exportApplications);
 exportButton.disabled = true;
 loadApplications();
+
+const retryNotifications = document.querySelector("#retryNotifications");
+retryNotifications.addEventListener("click", async () => {
+  retryNotifications.disabled = true;
+  try {
+    const response = await fetch("/api/notifications/retry", { method: "POST" });
+    if (!response.ok) throw new Error("Unable to retry notifications");
+    const result = await response.json();
+    retryNotifications.textContent = `Sent ${result.sent} / ${result.attempted}`;
+    await loadApplications();
+  } catch {
+    retryNotifications.textContent = "Retry failed — try again";
+  } finally { retryNotifications.disabled = false; }
+});

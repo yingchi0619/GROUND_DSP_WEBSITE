@@ -2,5 +2,21 @@
   "name": "gofoground",
   "main": "cloudflare/worker.js",
   "compatibility_date": "2026-10-29",
-  "workers_dev": true
+  "workers_dev": true,
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "gofoground-applications",
+      "database_id": "24534c3b-ae26-49c1-825b-be799ff54a92"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "APPLICATION_BACKUPS",
+      "bucket_name": "gofoground-application-backups"
+    }
+  ],
+  "vars": {
+    "NOTIFY_EMAIL": "junie.zhu@gofo.com"
+  }
 }
