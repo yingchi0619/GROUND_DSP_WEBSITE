@@ -29,7 +29,7 @@
           <p class="eyebrow" data-i18n="eyebrow">Delivery Service Partner Application</p>
           <h1 id="pageTitle" data-i18n="title">Tell us where you can deliver.</h1>
           <p data-i18n="subtitle">
-            Share your company contact details and operating region. Our team will review your information and follow up.
+            Apply as a company, fleet, or individual driver. Share your contact details and service area. Our team will review your information and follow up.
           </p>
           <div class="hero-pills" aria-label="Network highlights">
             <span data-i18n="networkCount">7 service states</span>
@@ -76,8 +76,15 @@
             </div>
           </div>
 
+          <fieldset class="applicant-modes">
+            <legend data-i18n="applicantTypeLabel">I am applying as</legend>
+            <div class="applicant-mode-options">
+              <label><input type="radio" name="applicantType" value="company_fleet" checked /><span data-i18n="companyFleetLabel">Company / Fleet</span></label>
+              <label><input type="radio" name="applicantType" value="individual_driver" /><span data-i18n="individualDriverLabel">Individual Driver</span></label>
+            </div>
+          </fieldset>
           <div class="field-grid">
-            <label class="field">
+            <label class="field" id="companyField">
               <span data-i18n="companyLabel">Company name</span>
               <input name="company" required autocomplete="organization" data-i18n-placeholder="companyPlaceholder" placeholder="Northline Logistics" />
             </label>

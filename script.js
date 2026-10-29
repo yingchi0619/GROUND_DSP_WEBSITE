@@ -1,10 +1,13 @@
 const copy = {
   en: {
+    applicantTypeLabel: "I am applying as",
+    companyFleetLabel: "Company / Fleet",
+    individualDriverLabel: "Individual Driver",
     documentTitle: "DSP Partner Application",
     brand: "DSP Partner",
     eyebrow: "Delivery Service Partner Application",
     title: "Tell us where you can deliver.",
-    subtitle: "Share your company contact details and operating region. Our team will review your information and follow up.",
+    subtitle: "Apply as a company, fleet, or individual driver. Share your contact details and service area. Our team will review your information and follow up.",
     mapEyebrow: "Eastern US network",
     referenceNote: "Visual reference only",
     networkCount: "7 service states",
@@ -45,11 +48,14 @@ const copy = {
     submitError: "Unable to submit right now. Please try again.",
   },
   zh: {
+    applicantTypeLabel: "申请类型",
+    companyFleetLabel: "公司 / 车队",
+    individualDriverLabel: "个人司机",
     documentTitle: "DSP 合作伙伴申请",
     brand: "DSP 合作伙伴",
     eyebrow: "配送服务伙伴申请",
     title: "告诉我们你可以负责的区域。",
-    subtitle: "请填写公司联系信息与服务区域。我们的团队会审核资料并与你联系。",
+    subtitle: "请选择公司、车队或个人司机申请，填写联系方式与服务区域。我们的团队会审核资料并与你联系。",
     mapEyebrow: "美东网络",
     referenceNote: "仅供可视化参考",
     networkCount: "7 个服务州",
@@ -90,11 +96,14 @@ const copy = {
     submitError: "当前无法提交，请稍后再试。",
   },
   es: {
+    applicantTypeLabel: "Tipo de solicitante",
+    companyFleetLabel: "Empresa / Flota",
+    individualDriverLabel: "Conductor individual",
     documentTitle: "Solicitud de Socio DSP",
     brand: "Socio DSP",
     eyebrow: "Solicitud para Delivery Service Partner",
     title: "Cuéntanos dónde puedes entregar.",
-    subtitle: "Comparte los datos de contacto de tu empresa y la región operativa. Nuestro equipo revisará la información y te contactará.",
+    subtitle: "Solicita como empresa, flota o conductor individual. Comparte tus datos de contacto y zona de servicio. Nuestro equipo revisará la información y te contactará.",
     mapEyebrow: "Red del este",
     referenceNote: "Solo como referencia visual",
     networkCount: "7 estados de servicio",
@@ -199,6 +208,17 @@ function updateCargoVanField() {
   if (!hasVans) cargoVanCount.value = "";
 }
 hasCargoVan.addEventListener("change", updateCargoVanField);
+const companyField = document.querySelector("#companyField");
+const companyInput = form.elements.company;
+function updateApplicantMode() {
+  const individual = form.elements.applicantType.value === "individual_driver";
+  companyField.hidden = individual;
+  companyField.classList.toggle("is-hidden", individual);
+  companyInput.required = !individual;
+  companyInput.disabled = individual;
+}
+form.querySelectorAll('[name="applicantType"]').forEach(input => input.addEventListener("change", updateApplicantMode));
+updateApplicantMode();
 const today = new Date();
 earliestStartDate.min = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
 let currentLanguage = "en";
@@ -513,6 +533,7 @@ form.addEventListener("submit", (event) => {
       setStatusMessage("success");
       successMessage.hidden = false;
       form.reset();
+      updateApplicantMode();
       updateOtherRegionField();
       updateCargoVanField();
     })

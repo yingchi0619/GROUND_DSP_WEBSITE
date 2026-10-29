@@ -2,7 +2,10 @@ const DETAILS_MARKER = "\n\n[GOFO application details]\n";
 
 export function validateApplication(data) {
   if (!data || typeof data !== "object" || Array.isArray(data)) throw new Error("Invalid application");
-  for (const field of ["company", "contact", "phone", "email", "region", "earliestStartDate"]) {
+  const applicantType = data.applicantType === undefined ? "company_fleet" : data.applicantType;
+  if (!["company_fleet", "individual_driver"].includes(applicantType)) throw new Error("Invalid applicant type");
+  if (applicantType === "company_fleet" && (typeof data.company !== "string" || !data.company.trim())) throw new Error("Missing company");
+  for (const field of [ "contact", "phone", "email", "region", "earliestStartDate"]) {
     if (typeof data[field] !== "string" || !data[field].trim()) throw new Error(`Missing ${field}`);
   }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(data.earliestStartDate) ||
@@ -14,7 +17,7 @@ export function validateApplication(data) {
   if (data.hasCargoVan === "yes" && (!Number.isInteger(count) || count < 1 || count > 10000)) {
     throw new Error("Cargo van count must be a whole number between 1 and 10000");
   }
-  return { ...data, cargoVanCount: count };
+  return { ...data, applicantType, company: applicantType === "individual_driver" ? "" : data.company.trim(), cargoVanCount: count };
 }
 
 // Preserve new fields in the existing Render database until a storage migration is selected.

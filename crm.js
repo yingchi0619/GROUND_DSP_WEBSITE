@@ -47,7 +47,7 @@ function csvCell(value) {
 }
 
 function exportApplications() {
-  const headers = ["id", "company", "contact", "phone", "email", "region", "language", "earliestStartDate", "hasCargoVan", "cargoVanCount", "email_status", "notes", "created_at"];
+  const headers = ["id", "applicantType", "company", "contact", "phone", "email", "region", "language", "earliestStartDate", "hasCargoVan", "cargoVanCount", "email_status", "notes", "created_at"];
   const rows = applications.map((item) => headers.map((key) => csvCell(item[key])).join(","));
   const csv = [headers.join(","), ...rows].join("\n");
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
@@ -80,7 +80,7 @@ function renderRows() {
   filtered.forEach((item) => {
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td>${escapeHtml(item.company)}</td>
+      <td>${escapeHtml(item.applicantType === "individual_driver" ? "Individual Driver" : item.company)}</td>
       <td>${escapeHtml(item.contact)}</td>
       <td>${escapeHtml(item.phone)}</td>
       <td><a href="mailto:${escapeHtml(item.email)}">${escapeHtml(item.email)}</a></td>

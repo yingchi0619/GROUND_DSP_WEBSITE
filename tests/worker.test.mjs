@@ -38,3 +38,13 @@ test('Formspree receives the applicant reply address and fleet details',async()=
  const env={...environment(),FORMSPREE_FORM_ID:'testform'};
  try{assert.equal((await submit(sample,env)).status,201);assert.equal(notification.url,'https://formspree.io/f/testform');assert.equal(notification.body.email,sample.email);assert.match(notification.body.message,/Cargo van count: 3/)}finally{globalThis.fetch=original}
 });
+test('individual driver needs no company and persists explicit type in D1 and backup',async()=>{
+ const env=environment();const {company,...driver}=sample;
+ assert.equal((await submit({...driver,applicantType:'individual_driver'},env)).status,201);
+ const saved=JSON.parse([...env.backups.values()][0]);assert.equal(saved.company,'');assert.equal(saved.applicantType,'individual_driver');assert.equal(env.rows[0].at(-1),'individual_driver');
+});
+test('company and fleet still require a company; invalid applicant types are rejected',async()=>{
+ for(const changes of [{applicantType:'company_fleet',company:''},{applicantType:'unknown'}]){
+ const env=environment();assert.equal((await submit({...sample,...changes},env)).status,400);assert.equal(env.backups.size,0);
+ }
+});

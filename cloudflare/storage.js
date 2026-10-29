@@ -1,5 +1,5 @@
 export const SCHEMA = `CREATE TABLE IF NOT EXISTS applications (
-  id TEXT PRIMARY KEY, company TEXT NOT NULL, contact TEXT NOT NULL,
+  id TEXT PRIMARY KEY, applicantType TEXT NOT NULL DEFAULT 'company_fleet', company TEXT NOT NULL, contact TEXT NOT NULL,
   phone TEXT NOT NULL, email TEXT NOT NULL, region TEXT NOT NULL,
   language TEXT NOT NULL, notes TEXT NOT NULL, earliestStartDate TEXT NOT NULL,
   hasCargoVan TEXT NOT NULL, cargoVanCount INTEGER NOT NULL,
@@ -13,18 +13,18 @@ export async function saveApplication(data, env) {
   const key = `applications/${application.created_at.slice(0, 10)}/${application.id}.json`;
   await env.APPLICATION_BACKUPS.put(key, JSON.stringify(application), { httpMetadata: { contentType: "application/json" } });
   await env.DB.prepare(`INSERT INTO applications
-    (id, company, contact, phone, email, region, language, notes, earliestStartDate, hasCargoVan, cargoVanCount, created_at, backup_key)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+    (id, company, contact, phone, email, region, language, notes, earliestStartDate, hasCargoVan, cargoVanCount, created_at, backup_key, applicantType)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`)
     .bind(application.id, application.company, application.contact, application.phone, application.email,
       application.region, application.language || "en", String(application.notes || ""), application.earliestStartDate,
-      application.hasCargoVan, application.cargoVanCount, application.created_at, key).run();
+      application.hasCargoVan, application.cargoVanCount, application.created_at, key, application.applicantType).run();
   return application;
 }
 
 export async function notifyApplication(application, env) {
   const useFormspree = /^[a-zA-Z0-9]+$/.test(env.FORMSPREE_FORM_ID || "");
   if (!useFormspree && (!env.RESEND_API_KEY || !env.NOTIFY_EMAIL || !env.FROM_EMAIL)) return "pending";
-  const text = ["New GOFO Ground DSP application", `Application: ${application.id}`, `Company: ${application.company}`,
+  const text = ["New GOFO Ground DSP application", `Application: ${application.id}`, `Applicant type: ${application.applicantType || "company_fleet"}`, `Company: ${application.company || "N/A (individual driver)"}`,
     `Contact: ${application.contact}`, `Email: ${application.email}`, `Phone: ${application.phone}`,
     `Region: ${application.region}`, `Earliest start date: ${application.earliestStartDate}`,
     `Cargo vans: ${application.hasCargoVan}`, `Cargo van count: ${application.cargoVanCount}`,
@@ -34,12 +34,12 @@ export async function notifyApplication(application, env) {
     const response = useFormspree
       ? await fetch(`https://formspree.io/f/${env.FORMSPREE_FORM_ID}`, {
           method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({ email: application.email, subject: `New DSP application: ${application.company}`, message: text }),
+          body: JSON.stringify({ email: application.email, subject: `New DSP application: ${application.company || application.contact}`, message: text }),
           signal: AbortSignal.timeout(10000),
         })
       : await fetch("https://api.resend.com/emails", {
           method: "POST", headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json", "Idempotency-Key": `application-${application.id}` },
-          body: JSON.stringify({ from: env.FROM_EMAIL, to: [env.NOTIFY_EMAIL], subject: `New DSP application: ${application.company}`, text }),
+          body: JSON.stringify({ from: env.FROM_EMAIL, to: [env.NOTIFY_EMAIL], subject: `New DSP application: ${application.company || application.contact}`, text }),
           signal: AbortSignal.timeout(10000),
         });
     status = response.ok ? "sent" : "failed";
