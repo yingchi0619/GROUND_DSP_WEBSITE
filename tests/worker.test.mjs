@@ -32,3 +32,9 @@ test('email provider failure does not lose or reject the saved application',asyn
  const env={...environment(),RESEND_API_KEY:'test-only',NOTIFY_EMAIL:'test@example.com',FROM_EMAIL:'sender@example.com'};
  try{assert.equal((await submit(sample,env)).status,201);assert.equal(env.rows.length,1)}finally{globalThis.fetch=original}
 });
+test('Formspree receives the applicant reply address and fleet details',async()=>{
+ const original=globalThis.fetch;let notification;
+ globalThis.fetch=async(url,options)=>{notification={url,body:JSON.parse(options.body)};return Response.json({ok:true})};
+ const env={...environment(),FORMSPREE_FORM_ID:'testform'};
+ try{assert.equal((await submit(sample,env)).status,201);assert.equal(notification.url,'https://formspree.io/f/testform');assert.equal(notification.body.email,sample.email);assert.match(notification.body.message,/Cargo van count: 3/)}finally{globalThis.fetch=original}
+});

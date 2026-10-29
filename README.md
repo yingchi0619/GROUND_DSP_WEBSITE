@@ -14,6 +14,6 @@ Cloudflare Builds is connected to this repository. Pushes to main deploy with `n
 
 The Worker validates earliest start date and fleet availability/count, saves an R2 backup and D1 record before acknowledging submission, and then attempts email notification. Historical Render records remain visible in the CRM alongside new D1 records. Admin login still depends on Render.
 
-Email delivery requires the Worker secret `RESEND_API_KEY` and variable `FROM_EMAIL` (an authorized Resend sender). `NOTIFY_EMAIL` is the requested recipient. Missing configuration or delivery failures leave a pending/failed email status in D1; admins can retry from the CRM. Email failure never rejects an already saved application. No SMS subscription has been enabled.
+Email delivery uses `FORMSPREE_FORM_ID` after configuring and verifying the recipient in Formspree. The free Formspree account currently allows 50 submissions per month. Resend is an optional alternative requiring the Worker secret `RESEND_API_KEY` and variable `FROM_EMAIL` (an authorized Resend sender). `NOTIFY_EMAIL` is the requested recipient. Missing configuration or delivery failures leave a pending/failed email status in D1; admins can retry from the CRM. Email failure never rejects an already saved application. No SMS subscription has been enabled.
 
 Verification: `node --test tests/worker.test.mjs`.

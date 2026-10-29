@@ -22,7 +22,8 @@ export async function saveApplication(data, env) {
 }
 
 export async function notifyApplication(application, env) {
-  if (!env.RESEND_API_KEY || !env.NOTIFY_EMAIL || !env.FROM_EMAIL) return "pending";
+  const useFormspree = /^[a-zA-Z0-9]+$/.test(env.FORMSPREE_FORM_ID || "");
+  if (!useFormspree && (!env.RESEND_API_KEY || !env.NOTIFY_EMAIL || !env.FROM_EMAIL)) return "pending";
   const text = ["New GOFO Ground DSP application", `Application: ${application.id}`, `Company: ${application.company}`,
     `Contact: ${application.contact}`, `Email: ${application.email}`, `Phone: ${application.phone}`,
     `Region: ${application.region}`, `Earliest start date: ${application.earliestStartDate}`,
@@ -30,11 +31,17 @@ export async function notifyApplication(application, env) {
     `Notes: ${application.notes || "-"}`, `Submitted: ${application.created_at}`].join("\n");
   let status = "failed";
   try {
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST", headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json", "Idempotency-Key": `application-${application.id}` },
-      body: JSON.stringify({ from: env.FROM_EMAIL, to: [env.NOTIFY_EMAIL], subject: `New DSP application: ${application.company}`, text }),
-      signal: AbortSignal.timeout(10000),
-    });
+    const response = useFormspree
+      ? await fetch(`https://formspree.io/f/${env.FORMSPREE_FORM_ID}`, {
+          method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({ email: application.email, subject: `New DSP application: ${application.company}`, message: text }),
+          signal: AbortSignal.timeout(10000),
+        })
+      : await fetch("https://api.resend.com/emails", {
+          method: "POST", headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json", "Idempotency-Key": `application-${application.id}` },
+          body: JSON.stringify({ from: env.FROM_EMAIL, to: [env.NOTIFY_EMAIL], subject: `New DSP application: ${application.company}`, text }),
+          signal: AbortSignal.timeout(10000),
+        });
     status = response.ok ? "sent" : "failed";
   } catch { /* Keep the application available for a later notification retry. */ }
   await env.DB.prepare("UPDATE applications SET email_status = ? WHERE id = ?").bind(status, application.id).run();
