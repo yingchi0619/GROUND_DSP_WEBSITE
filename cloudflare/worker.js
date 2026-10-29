@@ -5,8 +5,14 @@ const API_ORIGIN = "https://ground-dsp-website.onrender.com";
 const PUBLIC_FILES = new Set(["/", "/index.html", "/styles.css", "/script.js", "/us-map.svg", "/us-map-data.js", "/logo.svg", "/login.html", "/login.js", "/crm.html", "/crm.js"]);
 const json = (body, status = 200) => Response.json(body, { status, headers: { "Cache-Control": "no-store" } });
 async function isAdmin(request) {
-  const response = await fetch(new Request(API_ORIGIN + "/api/session", { headers: { Cookie: request.headers.get("Cookie") || "" } }));
-  return response.ok && (await response.json()).authenticated === true;
+  const cookie = request.headers.get("Cookie");
+  if (!cookie) return false;
+  try {
+    const response = await fetch(new Request(API_ORIGIN + "/api/session", {
+      headers: { Cookie: cookie }, signal: AbortSignal.timeout(10000),
+    }));
+    return response.ok && (await response.json()).authenticated === true;
+  } catch { return false; }
 }
 export default {
   async fetch(request, env) {
