@@ -5,10 +5,14 @@ const copy = {
     eyebrow: "Delivery Service Partner Application",
     title: "Tell us where you can deliver.",
     subtitle: "Share your company contact details and operating region. Our team will review your information and follow up.",
-    mapEyebrow: "Active network",
-    mapTitle: "Open stations across the United States",
-    mapSubtitle: "Orange states are currently active. Hover an active state to see station cities.",
-    legend: "Open station state",
+    mapEyebrow: "Eastern US network",
+    referenceNote: "Visual reference only",
+    networkCount: "7 service states",
+    networkRegion: "Eastern United States",
+    networkPurpose: "Coverage reference",
+    mapTitle: "Eastern US coverage overview",
+    mapSubtitle: "Highlighted states show our Eastern US network for visual reference only. Facility names and addresses are not displayed.",
+    legend: "Reference coverage",
     stationsLabel: "Stations",
     citiesLabel: "Cities",
     plannedLabel: "Coming soon",
@@ -22,7 +26,7 @@ const copy = {
     emailPlaceholder: "partners@example.com",
     regionLabel: "Responsible region",
     regionPlaceholder: "Bay Area, California",
-    regionSelectPlaceholder: "Select an active city",
+    regionSelectPlaceholder: "Select a service state",
     regionOther: "Other",
     regionOtherLabel: "Interested city",
     regionOtherPlaceholder: "Tell us the city you are interested in",
@@ -40,10 +44,14 @@ const copy = {
     eyebrow: "配送服务伙伴申请",
     title: "告诉我们你可以负责的区域。",
     subtitle: "请填写公司联系信息与服务区域。我们的团队会审核资料并与你联系。",
-    mapEyebrow: "当前网络",
-    mapTitle: "美国已开通站点",
-    mapSubtitle: "橙色州代表当前已开通站点。鼠标悬停在高亮州上可查看城市。",
-    legend: "已开通州",
+    mapEyebrow: "美东网络",
+    referenceNote: "仅供可视化参考",
+    networkCount: "7 个服务州",
+    networkRegion: "美国东部",
+    networkPurpose: "区域覆盖参考",
+    mapTitle: "美东服务区域概览",
+    mapSubtitle: "高亮州仅作为美东网络的可视化参考，不显示具体站点名称和地址。",
+    legend: "参考覆盖区域",
     stationsLabel: "站点",
     citiesLabel: "城市",
     plannedLabel: "即将开通",
@@ -57,7 +65,7 @@ const copy = {
     emailPlaceholder: "partners@example.com",
     regionLabel: "负责区域",
     regionPlaceholder: "上海及周边城市",
-    regionSelectPlaceholder: "选择已开通城市",
+    regionSelectPlaceholder: "选择服务州",
     regionOther: "其他",
     regionOtherLabel: "感兴趣的城市",
     regionOtherPlaceholder: "请填写你感兴趣的城市",
@@ -75,10 +83,14 @@ const copy = {
     eyebrow: "Solicitud para Delivery Service Partner",
     title: "Cuéntanos dónde puedes entregar.",
     subtitle: "Comparte los datos de contacto de tu empresa y la región operativa. Nuestro equipo revisará la información y te contactará.",
-    mapEyebrow: "Red activa",
-    mapTitle: "Estaciones abiertas en Estados Unidos",
-    mapSubtitle: "Los estados en naranja están activos. Pasa el cursor sobre un estado activo para ver las ciudades.",
-    legend: "Estado con estación abierta",
+    mapEyebrow: "Red del este",
+    referenceNote: "Solo como referencia visual",
+    networkCount: "7 estados de servicio",
+    networkRegion: "Este de Estados Unidos",
+    networkPurpose: "Referencia de cobertura",
+    mapTitle: "Cobertura del este de Estados Unidos",
+    mapSubtitle: "Los estados destacados representan la red del este solo como referencia visual. No se muestran nombres ni direcciones de instalaciones.",
+    legend: "Cobertura de referencia",
     stationsLabel: "Estaciones",
     citiesLabel: "Ciudades",
     plannedLabel: "Próximamente",
@@ -92,7 +104,7 @@ const copy = {
     emailPlaceholder: "partners@example.com",
     regionLabel: "Región responsable",
     regionPlaceholder: "Madrid y alrededores",
-    regionSelectPlaceholder: "Selecciona una ciudad activa",
+    regionSelectPlaceholder: "Selecciona un estado de servicio",
     regionOther: "Otra",
     regionOtherLabel: "Ciudad de interés",
     regionOtherPlaceholder: "Cuéntanos la ciudad que te interesa",
@@ -106,76 +118,14 @@ const copy = {
   },
 };
 
-const stationData = [
-  { station: "IN462", city: { en: "Indianapolis", zh: "印第安纳波利斯", es: "Indianápolis" }, state: "IN" },
-  { station: "LA900", city: { en: "Los Angeles", zh: "洛杉矶", es: "Los Ángeles" }, state: "CA" },
-  { station: "LV891", city: { en: "Las Vegas", zh: "拉斯维加斯", es: "Las Vegas" }, state: "NV" },
-  { station: "ST958", city: { en: "Sacramento", zh: "萨拉门托", es: "Sacramento" }, state: "CA" },
-  { station: "PT972", city: { en: "Portland", zh: "波特兰", es: "Portland" }, state: "OR" },
-  { station: "SF945", city: { en: "San Francisco", zh: "旧金山", es: "San Francisco" }, state: "CA" },
-  { station: "DAL", city: { en: "Dallas", zh: "达拉斯", es: "Dallas" }, state: "TX" },
-  { station: "NJ070/EWR.G", city: { en: "New Jersey", zh: "新泽西", es: "Nueva Jersey" }, state: "NJ" },
-  { station: "NY118", city: { en: "Long Island", zh: "纽约长岛", es: "Long Island" }, state: "NY" },
-  { station: "CC452", city: { en: "Cincinnati", zh: "辛辛那提", es: "Cincinnati" }, state: "OH" },
-  { station: "CL432", city: { en: "Columbus", zh: "哥伦布", es: "Columbus" }, state: "OH" },
-  { station: "CB080", city: { en: "Philadelphia", zh: "费城", es: "Filadelfia" }, state: "PA" },
-  { station: "NY112", city: { en: "Brooklyn", zh: "纽约布鲁克林", es: "Brooklyn" }, state: "NY" },
-  { station: "AT303/ATL", city: { en: "Atlanta", zh: "亚特兰大", es: "Atlanta" }, state: "GA" },
-  { station: "WI531", city: { en: "Milwaukee", zh: "密尔沃基", es: "Milwaukee" }, state: "WI" },
-  { station: "BA210", city: { en: "Baltimore", zh: "巴尔的摩", es: "Baltimore" }, state: "MD" },
-  { station: "BO021", city: { en: "Boston", zh: "波士顿", es: "Boston" }, state: "MA" },
-  { station: "CV441", city: { en: "Cleveland", zh: "克利夫兰", es: "Cleveland" }, state: "OH" },
-  { station: "MI481", city: { en: "Detroit", zh: "底特律", es: "Detroit" }, state: "MI" },
-  { station: "PX850", city: { en: "Phoenix", zh: "菲尼克斯", es: "Phoenix" }, state: "AZ" },
-  { station: "LA917/CNO.G", city: { en: "Los Angeles", zh: "洛杉矶", es: "Los Ángeles" }, state: "CA" },
-  { station: "CH600/ORD.G", city: { en: "Chicago", zh: "芝加哥", es: "Chicago" }, state: "IL" },
-  { station: "SE981", city: { en: "Seattle", zh: "西雅图", es: "Seattle" }, state: "WA" },
-  { station: "SD921", city: { en: "San Diego", zh: "圣地亚哥", es: "San Diego" }, state: "CA" },
-];
-
+// Public visualization uses state-level coverage only; no facility identifiers or addresses.
+const stationData = ["NY", "NJ", "PA", "MA", "MD", "OH", "MI"].map((state) => ({ state }));
 const stateNames = {
-  AZ: "Arizona",
-  CA: "California",
-  DC: "District of Columbia",
-  FL: "Florida",
-  GA: "Georgia",
-  IL: "Illinois",
-  IN: "Indiana",
-  MA: "Massachusetts",
-  MD: "Maryland",
-  MI: "Michigan",
-  NJ: "New Jersey",
-  NC: "North Carolina",
-  NV: "Nevada",
-  NY: "New York",
-  OH: "Ohio",
-  OR: "Oregon",
-  PA: "Pennsylvania",
-  TN: "Tennessee",
-  TX: "Texas",
-  WA: "Washington",
-  WI: "Wisconsin",
+  NY: "New York", NJ: "New Jersey", PA: "Pennsylvania", MA: "Massachusetts",
+  MD: "Maryland", OH: "Ohio", MI: "Michigan",
 };
-
-const coverageCityData = [
-  {
-    station: "BA210",
-    city: { en: "Washington DC", zh: "华盛顿 DC", es: "Washington DC" },
-    state: "DC",
-  },
-];
-
-const plannedCityData = [
-  { city: { en: "Nashville", zh: "纳什维尔", es: "Nashville" }, state: "TN" },
-  { city: { en: "Charlotte", zh: "夏洛特", es: "Charlotte" }, state: "NC" },
-  { city: { en: "Raleigh RDU", zh: "罗莉 RDU", es: "Raleigh RDU" }, state: "NC" },
-  { city: { en: "Miami", zh: "迈阿密", es: "Miami" }, state: "FL" },
-  { city: { en: "Orlando", zh: "奥兰多", es: "Orlando" }, state: "FL" },
-  { city: { en: "Tampa", zh: "坦帕", es: "Tampa" }, state: "FL" },
-  { city: { en: "Houston", zh: "休斯顿", es: "Houston" }, state: "TX" },
-  { city: { en: "Dallas", zh: "达拉斯", es: "Dallas" }, state: "TX" },
-  { city: { en: "Austin", zh: "奥斯汀", es: "Austin" }, state: "TX" },
-];
+const coverageCityData = [];
+const plannedCityData = [];
 
 const stationsByState = stationData.reduce((states, item) => {
   if (!states[item.state]) {
@@ -244,11 +194,11 @@ function localizedCity(city) {
 
 function populateRegionOptions() {
   const selectedValue = regionSelect.value;
-  const activeCities = [...new Set([...stationData, ...coverageCityData].map((item) => localizedCity(item.city)))];
+  const activeStates = stationData.map((item) => item.state);
 
   regionSelect.innerHTML = `
     <option value="" data-i18n="regionSelectPlaceholder">${copy[currentLanguage].regionSelectPlaceholder}</option>
-    ${activeCities.map((city) => `<option value="${city}">${city}</option>`).join("")}
+    ${activeStates.map((state) => `<option value="${stateNames[state]}">${stateNames[state]}</option>`).join("")}
     <option value="Other" data-i18n="regionOther">${copy[currentLanguage].regionOther}</option>
   `;
 
@@ -297,18 +247,9 @@ function setLanguage(language) {
   setStatusMessage(messageKey);
 }
 
-function tooltipMarkup(state, stations = [], plannedCities = []) {
-  const openCities = [...new Set(stations.map((item) => localizedCity(item.city)))].join(", ");
-  const planned = [...new Set(plannedCities.map((item) => localizedCity(item.city)))].join(", ");
-  const titleText = stations.length
-    ? `${stateNames[state] || state} · ${stations.length} ${copy[currentLanguage].stationsLabel}`
-    : `${stateNames[state] || state} · ${copy[currentLanguage].plannedLabel}`;
-
-  return `
-    <span class="tooltip-title">${titleText}</span>
-    ${openCities ? `<span class="tooltip-cities">${copy[currentLanguage].citiesLabel}: ${openCities}</span>` : ""}
-    ${planned ? `<span class="tooltip-cities">${copy[currentLanguage].plannedLabel}: ${planned}</span>` : ""}
-  `;
+function tooltipMarkup(state) {
+  return `<span class="tooltip-title">${stateNames[state] || state}</span>
+    <span class="tooltip-cities">${copy[currentLanguage].referenceNote}</span>`;
 }
 
 function moveTooltip(event) {
@@ -419,7 +360,7 @@ async function loadStationMap() {
     svg.removeAttribute("height");
     svg.setAttribute("viewBox", "0 0 959 593");
     svg.setAttribute("role", "img");
-    svg.setAttribute("aria-label", "United States map with active DSP station states");
+    svg.setAttribute("aria-label", "Eastern United States coverage reference map");
     applyMapZoom();
 
     const stateCodes = [...new Set([...Object.keys(stationsByState), ...Object.keys(coverageByState), ...Object.keys(plannedCitiesByState)])];
@@ -433,12 +374,7 @@ async function loadStationMap() {
         return;
       }
 
-      const openLabel = [...new Set(stations.map((item) => localizedCity(item.city)))].join(", ");
-      const plannedLabel = [...new Set(plannedCities.map((item) => localizedCity(item.city)))].join(", ");
-      const ariaLabel = [
-        openLabel ? `${stateNames[state]}: ${openLabel}` : "",
-        plannedLabel ? `${copy[currentLanguage].plannedLabel}: ${plannedLabel}` : "",
-      ].filter(Boolean).join("; ");
+      const ariaLabel = `${stateNames[state]}: ${copy[currentLanguage].referenceNote}`;
 
       statePaths.forEach((statePath) => {
         statePath.classList.toggle("is-open", stations.length > 0);

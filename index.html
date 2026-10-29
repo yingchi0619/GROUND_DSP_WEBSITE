@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DSP Partner Application</title>
-    <link rel="stylesheet" href="styles.css?v=20260520" />
+    <link rel="stylesheet" href="styles.css?v=20261029" />
   </head>
   <body>
     <main class="page-shell">
@@ -32,9 +32,9 @@
             Share your company contact details and operating region. Our team will review your information and follow up.
           </p>
           <div class="hero-pills" aria-label="Network highlights">
-            <span>24 stations</span>
-            <span>17 active states</span>
-            <span>US ground network</span>
+            <span data-i18n="networkCount">7 service states</span>
+            <span data-i18n="networkRegion">Eastern United States</span>
+            <span data-i18n="networkPurpose">Coverage reference</span>
           </div>
           <p class="ground-note" data-i18n="groundNote">GOFO Ground is focused on large parcel delivery.</p>
         </div>
@@ -42,16 +42,14 @@
         <section class="station-map-panel" aria-labelledby="mapTitle">
           <div class="map-copy">
             <p class="eyebrow" data-i18n="mapEyebrow">Active network</p>
-            <h2 id="mapTitle" data-i18n="mapTitle">Open stations across the United States</h2>
-            <p data-i18n="mapSubtitle">Orange states are currently active. Hover an active state to see station cities.</p>
+            <h2 id="mapTitle" data-i18n="mapTitle">Eastern US coverage overview</h2>
+            <p data-i18n="mapSubtitle">Highlighted states show our Eastern US network for visual reference only. Facility names and addresses are not displayed.</p>
           </div>
 
           <div class="map-frame">
             <div class="map-legend">
               <span class="legend-dot" aria-hidden="true"></span>
-              <span data-i18n="legend">Open station state</span>
-              <span class="legend-dot legend-dot-planned" aria-hidden="true"></span>
-              <span data-i18n="plannedLabel">Coming soon</span>
+              <span data-i18n="legend">Reference coverage</span>
             </div>
             <div class="us-map" id="usMap" aria-label="United States station map"></div>
             <div class="map-controls" aria-label="Map zoom controls">
@@ -102,7 +100,7 @@
             <label class="field field-wide">
               <span data-i18n="regionLabel">Responsible region</span>
               <select name="regionChoice" id="regionSelect" required>
-                <option value="" data-i18n="regionSelectPlaceholder">Select an active city</option>
+                <option value="" data-i18n="regionSelectPlaceholder">Select a service state</option>
               </select>
             </label>
 
@@ -138,6 +136,6 @@
     </a>
 
     <script src="us-map-data.js"></script>
-    <script src="script.js?v=20260520"></script>
+    <script src="script.js?v=20261029"></script>
   </body>
 </html>
